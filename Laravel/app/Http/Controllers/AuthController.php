@@ -21,9 +21,7 @@ class AuthController extends Controller
         if(!$user){
             return response()->json(['failed'=>'User not found.']);
         }
-        // $token = $user->createToken('auth_token')->plainTextToken;
-        // $cookie = cookie('token', $token, 60);
-        $user = User::where('email', $request->email)->first();
+
         if ($user && Hash::check($request->password, $user->password)) {
             $tokenResult = $user->createToken('Personal Access Token');
             $token = $tokenResult->accessToken;
@@ -37,7 +35,6 @@ class AuthController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        // return response()->json(['User' => $user,'success' => true, 'access_token' => $token, 'cookie' => $cookie, 'token_type' => 'Bearer']);
     }
     
 
