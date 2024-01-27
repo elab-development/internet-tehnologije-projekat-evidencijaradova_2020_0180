@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('plagPercent');
+            $table->string('paraphrasePercent');
             
             // $table->unsignedBigInteger('document_id');
             // $table->foreign('document_id')->references('id')->on('documents');

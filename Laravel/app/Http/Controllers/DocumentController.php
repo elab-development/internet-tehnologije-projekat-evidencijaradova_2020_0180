@@ -73,14 +73,6 @@ class DocumentController extends Controller
     }
     public function uploadFile(Request $request){
 
-        // $validator=Validator::make($request->all(),[
-        //     'file' => 'required|mimes:txt,docx|max:10240', // Maksimalna veličina 10MB
-        // ]);
-        
-        // if ($validator->fails()) {
-        //     return response()->json($validator->errors());
-        // }
-
         $file = $request->file('file');
         $filename = time() . '_' . $file->getClientOriginalName();
         $file->storeAs('uploads', $filename, 'public');
@@ -100,23 +92,23 @@ class DocumentController extends Controller
         return response()->json(['success' => 'Fajl is successfuly updated.']);
     }
 
-    // public static function file_u_tekst($filename){
-    //     $filePath = storage_path("app/public/uploads/{$filename}");
+    public static function file_u_tekst($filename){
+        $filePath = storage_path("app/public/uploads/{$filename}");
 
-    //     if (!file_exists($filePath)) {
-    //         return ['error' => 'Datoteka ne postoji.'];
-    //     }
-    //     $sadrzaj = file_get_contents($filePath);
+        if (!file_exists($filePath)) {
+            return ['error' => 'Datoteka ne postoji.'];
+        }
+        $sadrzaj = file_get_contents($filePath);
 
-    //     $document = Document::where('filename', $filename)->first();
+        $document = Document::where('filename', $filename)->first();
 
-    //     if (!$document) {
-    //         return ['error' => 'Podaci o dokumentu nisu pronađeni u bazi podataka.'];
-    //     }
+        if (!$document) {
+            return ['error' => 'Podaci o dokumentu nisu pronađeni u bazi podataka.'];
+        }
 
-    //     // Podela sadržaja na delove od 4500 karaktera
-    //     $rezultati = str_split($sadrzaj, 4500);
+        // Podela sadržaja na delove od 4500 karaktera
+        $rezultati = str_split($sadrzaj, 4500);
 
-    //     return $rezultati;
-    // }
+        return $rezultati;
+    }
 }
