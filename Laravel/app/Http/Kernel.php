@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use App\Http\Middleware\CheckUserRole;
 
 class Kernel extends HttpKernel
 {
@@ -13,6 +14,11 @@ class Kernel extends HttpKernel
      *
      * @var array<int, class-string|string>
      */
+
+     protected $routeMiddleware = [
+        // ...
+        'role' => CheckUserRole::class, // Register the role middleware
+    ];
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
