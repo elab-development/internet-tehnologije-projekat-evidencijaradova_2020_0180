@@ -4,6 +4,7 @@ import RegisterPage from './stranice/RegisterPage';
 import HomePage from './stranice/HomePage';
 import ContactPage from './stranice/ContactPage';
 import KorisniciPage from './stranice/KorisniciPage';
+import SlanjeFajlova from './stranice/SlanjeFajlova';
 import NavBar from './komponente/NavBar';
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -32,6 +33,7 @@ const App = ({ initialToken }) => {
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/korisnici' element={<KorisniciPage />} />
+          <Route path='/files' element={<SlanjeFajlova authToken={token} />} />
         </Routes>
       </BrowserRouter>
     </div>

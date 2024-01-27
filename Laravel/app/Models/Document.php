@@ -9,6 +9,8 @@ class Document extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['filename', 'user_id'];
+
     public function reportovi(){
         return $this->hasMany(Report::class);
     }

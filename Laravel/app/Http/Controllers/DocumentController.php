@@ -73,13 +73,13 @@ class DocumentController extends Controller
     }
     public function uploadFile(Request $request){
 
-        $validator=Validator::make($request->all(),[
-            'file' => 'required|mimes:txt,docx|max:10240', // Maksimalna veličina 10MB
-        ]);
+        // $validator=Validator::make($request->all(),[
+        //     'file' => 'required|mimes:txt,docx|max:10240', // Maksimalna veličina 10MB
+        // ]);
         
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
+        // if ($validator->fails()) {
+        //     return response()->json($validator->errors());
+        // }
 
         $file = $request->file('file');
         $filename = time() . '_' . $file->getClientOriginalName();
