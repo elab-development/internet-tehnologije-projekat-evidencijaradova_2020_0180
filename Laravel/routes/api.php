@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,15 @@ Route::group(['middleware' => ['auth:api', 'role:professor']], function () {
             Route::post('create-user', 'store')->name('store');
             Route::put('update-user/{id}', 'update')->name('update');
             Route::delete('destroy-user/{id}', 'destroy')->name('destroy');
+        });
+    });
+    Route::resource('documents', DocumentController::class);
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::controller(DocumentController::class)->group(function(){
+        Route::name('document.')->group(function(){
+            Route::post('uploadFile', 'uploadFile')->name('uploadFile');
         });
     });
 });
