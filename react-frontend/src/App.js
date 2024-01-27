@@ -1,23 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import LoginPage from './stranice/LoginPage';
+import RegisterPage from './stranice/RegisterPage';
+import NavBar from './komponente/NavBar';
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
+const App = ({ initialToken }) => {
+  const [token, setToken] = useState(initialToken);
+
+  const addToken = (newToken) => {
+    setToken(newToken);
+    window.localStorage.setItem("auth_token", newToken);
+  };
+
+  const removeToken = () => {
+    setToken(null);
+    window.localStorage.removeItem("auth_token");
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <NavBar token={token} removeToken={removeToken} />
+        <Routes>
+          <Route path='/login' element={<LoginPage addToken={addToken} />} />
+          <Route path='/register' element={<RegisterPage />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
