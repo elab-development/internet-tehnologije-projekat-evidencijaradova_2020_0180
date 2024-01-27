@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reports', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->string('plagPercent');
-            
-            // $table->unsignedBigInteger('document_id');
-            // $table->foreign('document_id')->references('id')->on('documents');
+        Schema::table('reports', function (Blueprint $table) {
+            $table->integer('uniquePercent')->nullable();
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reports');
+        Schema::table('reports', function (Blueprint $table) {
+            $table->dropColumn('uniquePercent');
+        });
     }
 };
