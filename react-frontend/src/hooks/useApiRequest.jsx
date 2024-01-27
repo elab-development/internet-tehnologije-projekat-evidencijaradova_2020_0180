@@ -7,33 +7,31 @@
 import { useState } from 'react';
 
 const useApiRequest = (initialData = null) => {
-  // Stanje za praćenje podataka, grešaka i statusa učitavanja
   const [data, setData] = useState(initialData);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // fetchData funkcija se koristi za izvršavanje API zahteva
   const fetchData = async (apiFunction, ...args) => {
     try {
-      // Postavljanje statusa učitavanja na true pre nego što se izvrši zahtev
       setLoading(true);
-      
-      // Izvršavanje API funkcije sa prosleđenim argumentima
       const response = await apiFunction(...args);
-      
-      // Postavljanje podataka na rezultat iz API odgovora
       setData(response.data);
+      return null; // Indicates no error occurred
     } catch (err) {
-      // Ako se pojavi greška, postavljanje greške u odgovarajuće stanje
-      setError(err);
+      console.error('API Request Error:', err);
+      if (err.response) {
+        console.error('Server Response:', err.response);
+      }
+      return err; // Return the entire error object
     } finally {
-      // Bez obzira na ishod, postavljanje statusa učitavanja na false nakon završetka zahteva
       setLoading(false);
     }
   };
+  
+  
+  
+  
 
-  // Povratna vrednost hook-a, sadrži trenutne podatke, grešku, status učitavanja i funkciju za izvršavanje zahteva
-  return { data, error, loading, fetchData };
+  return { data, loading, fetchData };
 };
 
 // Exportovanje hook-a kako bi bio dostupan u drugim delovima aplikacije

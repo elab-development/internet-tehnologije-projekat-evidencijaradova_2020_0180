@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import TextInput from '../komponente/TextInput';
-import useApiRequest from '../hooks/useApiRequest';
+
 // Komponenta za registraciju korisnika
 const RegisterPage = () => {
   // Stanje za čuvanje podataka o korisniku (korisničko ime, email, šifra)
@@ -12,8 +12,11 @@ const RegisterPage = () => {
     password: '',
   });
 
-  // Custom hook za upravljanje API pozivima
-  const { data, error, loading, fetchData } = useApiRequest();
+  // State for managing loading status
+  const [loading, setLoading] = useState(false);
+
+  // Hook za navigaciju iz React Router-a
+  let navigate = useNavigate();
 
   // Funkcija za ažuriranje stanja na osnovu korisničkog unosa
   const handleInput = (e) => {
@@ -22,25 +25,28 @@ const RegisterPage = () => {
     setUserData(newUserData);
   };
 
-  // Hook za navigaciju iz React Router-a
-  let navigate = useNavigate();
-
   // Funkcija koja se poziva prilikom pokušaja registracije
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true
 
-    // Pozivamo fetchData funkciju koja će obaviti API poziv
-    await fetchData(axios.post, 'api/register', userData);
-
-    // Provera da li je registracija uspešna
-    if (!error && data) {
-      console.log(data);
-      // Nakon uspešne registracije, preusmeravanje na stranicu za prijavu
+    try {
+      const response = await axios.post('api/register', userData);
+      console.log('Registration successful:', response.data);
       navigate('/login');
-    } else {
-      console.log(error);
+    } catch (err) {
+      console.error('Registration failed. Error object:', err);
+      if (err.response) {
+        console.error('Error response:', err.response);
+      }
+    } finally {
+      setLoading(false); // Set loading to false
     }
   };
+  
+  
+  
+  
 
   return (
     <section
