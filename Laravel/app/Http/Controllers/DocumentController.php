@@ -17,7 +17,9 @@ class DocumentController extends Controller
     public function index()
     {
         $documents=Document::all();
-        return new DocumentCollection($documents);
+        // return new DocumentCollection($documents);
+        return response()->json($documents);
+
     }
 
     /**
