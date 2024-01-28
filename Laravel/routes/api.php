@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,7 +42,14 @@ Route::group(['middleware' => ['auth:api', 'role:professor']], function () {
             Route::delete('destroy-user/{id}', 'destroy')->name('destroy');
         });
     });
+    
     Route::resource('documents', DocumentController::class);
+
+    Route::controller(ReportController::class)->group(function(){
+        Route::name('report.')->group(function(){
+            Route::post('check-plagiarism/{filename}', 'checkPlagiarism')->name('check-plagiarism');
+        });
+    });
 });
 
 Route::middleware('auth:api')->group(function () {
