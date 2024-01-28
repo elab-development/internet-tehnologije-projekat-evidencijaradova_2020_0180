@@ -15,33 +15,36 @@ class ReportController extends Controller
         $strings=DocumentController::file_u_tekst($filename);
         $dokument=Document::where('filemame',$filename)->first();
         $plagPercentSum=0;
-        $paraphrasePercent=0;
+        $paraphrasePercentSum=0;
         $broj_elemenata=count($strings);
         foreach ($strings as $text) {
             try {
                 $response = Http::post('https://www.prepostseo.com/apis/checkPlag', [
                     'key' => $apiKey,
-                    'data' => $text,
+                    'data' => $text
                 ]);
     
                 $result = json_decode($response->getBody(), true);
 
                 $plagPercentSum += $result->plagPercent;
-                $paraphrasePercent+= $result->paraphrasePercent;
+                $paraphrasePercentSum+= $result->paraphrasePercent;
                 
             } catch (\Exception $e) {
 
                 $results[] = ['error' => $e->getMessage()];
             }
         }
-        $rez=$plagPercentSum/$broj_elemenata;
+        $rez1=$plagPercentSum/$broj_elemenata;
+        $rez2=$paraphrasePercentSum/$broj_elemenata;
+
         Report::create([
-            'plagPercent'=>$rez,
+            'plagPercent'=>$rez1,
             'document_id'=>$dokument->id,
-            'paraphrasePercent'=>$paraphrasePercent
+            'paraphrasePercent'=>$rez2
         ]);
         return response()->json([
-            'plagPercent'=>$rez,
+            'plagPercent'=>$rez1,
+            'paraphrasePercent'=>$rez2
         ]);
     }
 }
