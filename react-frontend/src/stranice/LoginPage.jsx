@@ -1,8 +1,10 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TextInput from '../komponente/TextInput';
+import Button from '../komponente/Button';
+import { UserContext } from "../komponente/UserContext";
 
 // Komponenta za prijavljivanje korisnika
 const LoginPage = ({ addToken }) => {
@@ -19,25 +21,28 @@ const LoginPage = ({ addToken }) => {
     setUserData(newUserData);
   }
 
+  const { setUser } = useContext(UserContext);
   // Hook za navigaciju iz React Router-a
   let navigate = useNavigate();
 
   // Funkcija koja se poziva prilikom pokušaja prijave
   function handleLogin(e) {
     e.preventDefault();
-    // Slanje HTTP POST zahteva ka serveru za prijavu korisnika
     axios
       .post("api/login", userData)
       .then((response) => {
         console.log(response.data);
 
-        // Provera uspešnosti prijave
         if (response.data.success === true) {
-          // Čuvanje autentikacionog tokena u lokalnom skladištu
           window.localStorage.setItem("auth_token", response.data.access_token);
-          // Dodavanje tokena u stanje komponente iznad (prop 'addToken')
           addToken(response.data.access_token);
-          // Navigacija na početnu stranicu
+
+          // Update user context with authentication status and role
+          setUser({
+            isAuthenticated: true,
+            role: response.data.role // Assuming role is in the response
+          });
+
           navigate("/");
         }
       })
@@ -100,16 +105,13 @@ const LoginPage = ({ addToken }) => {
 
               <div className="row justify-content-center">
                 <div className="col-auto">
-                  <button
+                  <Button
                     type="submit"
                     className="btn btn-primary btn-lg"
-                    style={{
-                      paddingLeft: 2.5 + 'rem',
-                      paddingRight: 2.5 + 'rem',
-                    }}
+                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
                   >
                     Prijava
-                  </button>
+                  </Button>
                   <p className="small fw-bold mt-2 pt-1 mb-0">
                     Nemate nalog?{' '}
                     <a href="/register" className="link-danger">

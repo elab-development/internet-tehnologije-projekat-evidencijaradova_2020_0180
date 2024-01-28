@@ -17,9 +17,7 @@ class DocumentController extends Controller
     public function index()
     {
         $documents=Document::all();
-        // return new DocumentCollection($documents);
-        return response()->json($documents);
-
+        return new DocumentCollection($documents);
     }
 
     /**
@@ -94,21 +92,19 @@ class DocumentController extends Controller
         return response()->json(['success' => 'Fajl is successfuly updated.']);
     }
 
-    public static function file_u_tekst($filename){
-        $filePath = storage_path("app/public/uploads/{$filename}");
+    public static function file_u_tekst($id){
+        $document=Document::find($id);
+        if(is_null($document)){
+            return response()->json('Data not found', 404);
+        }
+        $filePath = storage_path("app/public/uploads/{$document->filename}");
 
         if (!file_exists($filePath)) {
             return ['error' => 'Datoteka ne postoji.'];
         }
         $sadrzaj = file_get_contents($filePath);
 
-        $document = Document::where('filename', $filename)->first();
-
-        if (!$document) {
-            return ['error' => 'Podaci o dokumentu nisu pronađeni u bazi podataka.'];
-        }
-
-        // Podela sadržaja na delove od 4500 karaktera
+        // Podela sadrÅ¾aja na delove od 4500 karaktera
         $rezultati = str_split($sadrzaj, 4500);
 
         return $rezultati;

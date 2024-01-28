@@ -6,28 +6,42 @@ use App\Models\Document;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
-    public function checkPlagiarism($filename)
+    public function checkPlagiarism($file_id)
     {
         $apiKey = '86edd31ad1bc4fcd2f6561f8b6f2cc0e';
-        $strings=DocumentController::file_u_tekst($filename);
-        $dokument=Document::where('filemame',$filename)->first();
+        $strings=DocumentController::file_u_tekst($file_id);
+        Log::info("Checking plagiarism for file ID: " . $file_id);
+
+        $dokument = Document::find($file_id);
+        Log::info("Document found: ", ['document' => $dokument]);
+    
+        if (!$dokument) {
+            Log::warning("Document not found for file ID: " . $file_id);
+            return response()->json(['error' => 'Document not found'], 404);
+        }
+    
         $plagPercentSum=0;
         $paraphrasePercentSum=0;
         $broj_elemenata=count($strings);
         foreach ($strings as $text) {
             try {
-                $response = Http::post('https://www.prepostseo.com/apis/checkPlag', [
+
+                $response = Http::asForm()->post('https://www.prepostseo.com/apis/checkPlag', [
                     'key' => $apiKey,
                     'data' => $text
                 ]);
     
                 $result = json_decode($response->getBody(), true);
 
-                $plagPercentSum += $result->plagPercent;
-                $paraphrasePercentSum+= $result->paraphrasePercent;
+        
+                $plagPercentSum += $result['plagPercent'];
+                $paraphrasePercentSum += $result['paraphrasePercent'];
+    
+                        
                 
             } catch (\Exception $e) {
 
@@ -39,12 +53,14 @@ class ReportController extends Controller
 
         Report::create([
             'plagPercent'=>$rez1,
-            'document_id'=>$dokument->id,
-            'paraphrasePercent'=>$rez2
+            'paraphrasePercent'=>$rez2,
+            'document_id'=>$dokument->id
+
         ]);
         return response()->json([
             'plagPercent'=>$rez1,
-            'paraphrasePercent'=>$rez2
+            'paraphrasePercent'=>$rez2,
+            'document_id'=>$dokument->id
         ]);
     }
 }

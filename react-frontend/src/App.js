@@ -7,8 +7,10 @@ import KorisniciPage from './stranice/KorisniciPage';
 import SlanjeFajlova from './stranice/SlanjeFajlova';
 import DokumentiPage from './stranice/DokumentiPage';
 import NavBar from './komponente/NavBar';
+import { UserProvider } from './komponente/UserContext';
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from './komponente/ProtectedRoute';
 
 const App = ({ initialToken }) => {
   const [token, setToken] = useState(initialToken);
@@ -25,19 +27,20 @@ const App = ({ initialToken }) => {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        {/* Pass the token and removeToken function to NavBar */}
-        <NavBar token={token} removeToken={removeToken} />
-        <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/login' element={<LoginPage addToken={addToken} />} />
-          <Route path='/register' element={<RegisterPage />} />
-          <Route path='/contact' element={<ContactPage />} />
-          <Route path='/korisnici' element={<KorisniciPage />} />
-          <Route path='/files' element={<SlanjeFajlova authToken={token} />} />
-          <Route path='/pregled-radova' element={<DokumentiPage authToken={token} />} />
-        </Routes>
-      </BrowserRouter>
+      <UserProvider>
+        <BrowserRouter>
+          <NavBar token={token} removeToken={removeToken} />
+          <Routes>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/login' element={<LoginPage addToken={addToken} />} />
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/contact' element={<ContactPage />} />
+            <Route path='/users' element={<ProtectedRoute><KorisniciPage authToken={token}/></ProtectedRoute>} />
+            <Route path='/files' element={<ProtectedRoute><SlanjeFajlova authToken={token} /></ProtectedRoute>} />
+            <Route path='/pregled-radova' element={<ProtectedRoute><DokumentiPage authToken={token} /></ProtectedRoute>} />
+          </Routes>
+        </BrowserRouter>
+      </UserProvider>
     </div>
   );
 }

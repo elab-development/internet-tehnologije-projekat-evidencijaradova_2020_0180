@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import TextInput from '../komponente/TextInput';
+import Button from '../komponente/Button';
 
 // Komponenta za registraciju korisnika
 const RegisterPage = () => {
@@ -95,17 +96,14 @@ const RegisterPage = () => {
 
               <div className="row justify-content-center">
                 <div className="col-auto">
-                  <button
+                  <Button
                     type="submit"
                     className="btn btn-primary btn-lg"
-                    style={{
-                      paddingLeft: 2.5 + 'rem',
-                      paddingRight: 2.5 + 'rem',
-                    }}
-                    disabled={loading}  // Onemogućiti dugme dok traje API poziv
+                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
+                    disabled={loading}
                   >
                     {loading ? 'Registracija u toku...' : 'Registracija'}
-                  </button>
+                  </Button>
                   <p className="small fw-bold mt-2 pt-1 mb-0">
                     Imate nalog?{' '}
                     <a href="/login" className="link-danger">

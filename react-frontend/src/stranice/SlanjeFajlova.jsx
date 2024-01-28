@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Button from '../komponente/Button';
 
 // Komponenta za slanje fajlova
 const SlanjeFajlova = ({ authToken }) => {
@@ -70,10 +71,9 @@ const SlanjeFajlova = ({ authToken }) => {
           </div>
           <div className="row justify-content-center">
             <div className="col-auto">
-              {/* Dugme za slanje fajla */}
-              <button className="btn btn-primary" onClick={handleUpload}>
-                <a href="#">Pošalji</a>
-              </button>
+              <Button className="btn btn-primary" onClick={handleUpload}>
+                <a href='/'>Pošalji</a>
+              </Button>
             </div>
           </div>
         </div>

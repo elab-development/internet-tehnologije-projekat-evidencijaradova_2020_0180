@@ -47,7 +47,7 @@ Route::group(['middleware' => ['auth:api', 'role:professor']], function () {
 
     Route::controller(ReportController::class)->group(function(){
         Route::name('report.')->group(function(){
-            Route::post('check-plagiarism/{filename}', 'checkPlagiarism')->name('check-plagiarism');
+            Route::post('check-plagiarism/{file_id}', 'checkPlagiarism')->name('check-plagiarism');
         });
     });
 });

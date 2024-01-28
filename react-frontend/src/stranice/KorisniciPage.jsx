@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
+import Button from '../komponente/Button';
+const token = localStorage.getItem('auth_token');
 
 const KorisniciPage = () => {
   const [users, setUsers] = useState([]);
@@ -45,7 +47,6 @@ const KorisniciPage = () => {
     setUpdateFormData({
       name: selectedUser.name,
       email: selectedUser.email,
-      password: '',
     });
   };
 
@@ -53,32 +54,45 @@ const KorisniciPage = () => {
   const handleUpdateFormSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (!token) {
+        console.error('Access token not found in local storage');
+        return;
+      }
+  
       // Slanje HTTP PUT zahteva za ažuriranje korisnika
       await axios.put(`/api/update-user/${updatingUserId}`, {
         name: updateFormData.name,
         email: updateFormData.email,
-        password: updateFormData.password,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
+  
       setUpdatingUserId(null);
-      setUpdateFormData({ name: '', email: '', password: '' });
+      setUpdateFormData({ name: '', email: '' });
       // Ponovno dohvatanje korisnika nakon ažuriranja
       fetchUsers();
     } catch (error) {
       console.error('Greška prilikom ažuriranja korisnika:', error);
     }
   };
+  
 
   // Funkcija za brisanje korisnika
   const handleDelete = async (userId) => {
-    try {
-      // Slanje HTTP DELETE zahteva za brisanje korisnika
-      await axios.delete(`/api/destroy-user/${userId}`);
-      // Ponovno dohvatanje korisnika nakon brisanja
+    try {  
+      await axios.delete(`/api/destroy-user/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       fetchUsers();
     } catch (error) {
       console.error('Greška prilikom brisanja korisnika:', error);
     }
   };
+  
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);
@@ -109,15 +123,9 @@ const KorisniciPage = () => {
                 onChange={(e) => setUpdateFormData({ ...updateFormData, email: e.target.value })}
                 placeholder="Email"
               />
-              <input
-                type="password"
-                value={updateFormData.password}
-                onChange={(e) => setUpdateFormData({ ...updateFormData, password: e.target.value })}
-                placeholder="Šifra"
-              />
-              <button type="submit" className="btn btn-success py-1">
+              <Button type="submit" className="btn btn-success py-1">
                 Sačuvaj promene
-              </button>
+              </Button>
             </form>
           ) : (
             // Tabela sa korisnicima
@@ -139,14 +147,14 @@ const KorisniciPage = () => {
                     <td className="align-middle">{user.name}</td>
                     <td className="align-middle">{user.email}</td>
                     <td className="align-middle">
-                      <button className="btn btn-warning py-1" onClick={() => handleUpdate(user.id)}>
-                        Ažuriraj
-                      </button>
+                    <Button className="btn btn-warning py-1" onClick={() => handleUpdate(user.id)}>
+                      Ažuriraj
+                    </Button>
                     </td>
                     <td className="align-middle">
-                      <button className="btn btn-danger py-1" onClick={() => handleDelete(user.id)}>
-                        Obriši
-                      </button>
+                    <Button className="btn btn-danger py-1" onClick={() => handleDelete(user.id)}>
+                      Obriši
+                    </Button>
                     </td>
                   </tr>
                 ))}
