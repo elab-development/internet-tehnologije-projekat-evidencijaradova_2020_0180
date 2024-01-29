@@ -6,6 +6,7 @@ import { UserContext } from './UserContext';
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(UserContext);
 
+
   if (!user.isAuthenticated || user.role !== 'professor') {
     return <Navigate to="/login" replace />;
   }

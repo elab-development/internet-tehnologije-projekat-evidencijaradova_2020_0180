@@ -29,7 +29,8 @@ class AuthController extends Controller
                 'success' => true,
                 'access_token' => $token,
                 'token_type' => 'Bearer',
-                'expires_at' => $tokenResult->token->expires_at->toDateTimeString()
+                'expires_at' => $tokenResult->token->expires_at->toDateTimeString(),
+                'role' => $user->role
             ]);
         } else {
             return response()->json(['message' => 'Unauthorized'], 401);

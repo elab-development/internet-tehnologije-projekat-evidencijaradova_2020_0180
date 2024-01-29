@@ -11,6 +11,7 @@ import { UserProvider } from './komponente/UserContext';
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from './komponente/ProtectedRoute';
+import FilesProtectedRoute from './komponente/FilesProtectedRoute';
 
 const App = ({ initialToken }) => {
   const [token, setToken] = useState(initialToken);
@@ -36,7 +37,7 @@ const App = ({ initialToken }) => {
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/contact' element={<ContactPage />} />
             <Route path='/users' element={<ProtectedRoute><KorisniciPage authToken={token}/></ProtectedRoute>} />
-            <Route path='/files' element={<ProtectedRoute><SlanjeFajlova authToken={token} /></ProtectedRoute>} />
+            <Route path='/files' element={<FilesProtectedRoute><SlanjeFajlova authToken={token} /></FilesProtectedRoute>} />
             <Route path='/pregled-radova' element={<ProtectedRoute><DokumentiPage authToken={token} /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
