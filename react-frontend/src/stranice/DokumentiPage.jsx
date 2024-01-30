@@ -60,7 +60,10 @@ const DokumentiPage = () => {
   };
 
   const handlePlagiarism = async (id) => {
+    
     try {
+      const token = localStorage.getItem('auth_token');
+
       if (!token) {
         console.error('Access token not found in local storage');
         return;

@@ -7,11 +7,8 @@ import KorisniciPage from './stranice/KorisniciPage';
 import SlanjeFajlova from './stranice/SlanjeFajlova';
 import DokumentiPage from './stranice/DokumentiPage';
 import NavBar from './komponente/NavBar';
-import { UserProvider } from './komponente/UserContext';
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProtectedRoute from './komponente/ProtectedRoute';
-import FilesProtectedRoute from './komponente/FilesProtectedRoute';
 
 const App = ({ initialToken }) => {
   const [token, setToken] = useState(initialToken);
@@ -28,7 +25,6 @@ const App = ({ initialToken }) => {
 
   return (
     <div className="App">
-      <UserProvider>
         <BrowserRouter>
           <NavBar token={token} removeToken={removeToken} />
           <Routes>
@@ -36,12 +32,11 @@ const App = ({ initialToken }) => {
             <Route path='/login' element={<LoginPage addToken={addToken} />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/contact' element={<ContactPage />} />
-            <Route path='/users' element={<ProtectedRoute><KorisniciPage authToken={token}/></ProtectedRoute>} />
-            <Route path='/files' element={<FilesProtectedRoute><SlanjeFajlova authToken={token} /></FilesProtectedRoute>} />
-            <Route path='/pregled-radova' element={<ProtectedRoute><DokumentiPage authToken={token} /></ProtectedRoute>} />
+            <Route path='/users' element={<KorisniciPage authToken={token}/>} />
+            <Route path='/files' element={<SlanjeFajlova authToken={token} />} />
+            <Route path='/pregled-radova' element={<DokumentiPage authToken={token} />} />
           </Routes>
         </BrowserRouter>
-      </UserProvider>
     </div>
   );
 }

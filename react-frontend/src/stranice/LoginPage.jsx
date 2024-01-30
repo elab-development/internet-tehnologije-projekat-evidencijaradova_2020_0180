@@ -1,10 +1,9 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TextInput from '../komponente/TextInput';
 import Button from '../komponente/Button';
-import { UserContext } from "../komponente/UserContext";
 
 // Komponenta za prijavljivanje korisnika
 const LoginPage = ({ addToken }) => {
@@ -21,7 +20,6 @@ const LoginPage = ({ addToken }) => {
     setUserData(newUserData);
   }
 
-  const { setUser } = useContext(UserContext);
   // Hook za navigaciju iz React Router-a
   let navigate = useNavigate();
 
@@ -36,13 +34,6 @@ const LoginPage = ({ addToken }) => {
         if (response.data.success === true) {
           window.localStorage.setItem("auth_token", response.data.access_token);
           addToken(response.data.access_token);
-
-          // Update user context with authentication status and role
-          setUser({
-            isAuthenticated: true,
-            role: response.data.role // Assuming role is in the response
-          });
-
           navigate("/");
         }
       })

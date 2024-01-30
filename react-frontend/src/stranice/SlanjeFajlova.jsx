@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Button from '../komponente/Button';
+import { useNavigate } from 'react-router-dom';
 
 // Komponenta za slanje fajlova
 const SlanjeFajlova = ({ authToken }) => {
@@ -11,6 +12,7 @@ const SlanjeFajlova = ({ authToken }) => {
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
+  let navigate = useNavigate();
 
   // Funkcija za slanje fajla na server
   const handleUpload = () => {
@@ -47,6 +49,7 @@ const SlanjeFajlova = ({ authToken }) => {
     } else {
       console.error('No file selected for upload.');
     }
+    navigate("/");
   };
 
   // Prikazivanje korisničkog interfejsa
@@ -72,7 +75,7 @@ const SlanjeFajlova = ({ authToken }) => {
           <div className="row justify-content-center">
             <div className="col-auto">
               <Button className="btn btn-primary" onClick={handleUpload}>
-                <a href='/'>Pošalji</a>
+                <p className='m-0'>Pošalji</p>
               </Button>
             </div>
           </div>
