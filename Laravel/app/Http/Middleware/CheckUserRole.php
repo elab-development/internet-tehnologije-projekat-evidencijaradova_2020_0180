@@ -16,7 +16,6 @@ class CheckUserRole
     public function handle($request, Closure $next, ...$roles)
     {
         if (!in_array($request->user()->role, $roles)) {
-            // Ako korisnik nema odgovarajuću ulogu, vrati grešku
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 

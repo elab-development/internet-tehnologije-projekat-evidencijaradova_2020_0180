@@ -71,6 +71,8 @@ class DocumentController extends Controller
         return response()->json(['message' => 'Document deleted successfully']);
 
     }
+
+
     public function uploadFile(Request $request){
 
         $file = $request->file('file');
@@ -79,7 +81,6 @@ class DocumentController extends Controller
 
         $user = Auth::user();
 
-        // Ako korisnik postoji, dodajemo user_id u dokument
         if ($user) {
             Document::create([
                 'filename' => $filename,
@@ -100,11 +101,10 @@ class DocumentController extends Controller
         $filePath = storage_path("app/public/uploads/{$document->filename}");
 
         if (!file_exists($filePath)) {
-            return ['error' => 'Datoteka ne postoji.'];
+            return response()->json('Data not found', 404);
         }
         $sadrzaj = file_get_contents($filePath);
 
-        // Podela sadrÅ¾aja na delove od 4500 karaktera
         $rezultati = str_split($sadrzaj, 4500);
 
         return $rezultati;

@@ -14,13 +14,9 @@ class ReportController extends Controller
     {
         $apiKey = '86edd31ad1bc4fcd2f6561f8b6f2cc0e';
         $strings=DocumentController::file_u_tekst($file_id);
-        Log::info("Checking plagiarism for file ID: " . $file_id);
-
         $dokument = Document::find($file_id);
-        Log::info("Document found: ", ['document' => $dokument]);
     
         if (!$dokument) {
-            Log::warning("Document not found for file ID: " . $file_id);
             return response()->json(['error' => 'Document not found'], 404);
         }
     
@@ -55,7 +51,6 @@ class ReportController extends Controller
             'plagPercent'=>$rez1,
             'paraphrasePercent'=>$rez2,
             'document_id'=>$dokument->id
-
         ]);
         return response()->json([
             'plagPercent'=>$rez1,
