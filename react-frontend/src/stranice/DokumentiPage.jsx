@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import Button from '../komponente/Button';
-const token = localStorage.getItem('auth_token');
 
 const DokumentiPage = () => {
   const [documents, setDocuments] = useState([]);
@@ -12,13 +11,7 @@ const DokumentiPage = () => {
   const [documentsPerPage] = useState(5);
 
   useEffect(() => {
-    // Load documents from local storage on component mount
-    const savedDocuments = localStorage.getItem('documents');
-    if (savedDocuments) {
-      setDocuments(JSON.parse(savedDocuments));
-    } else {
-      fetchDocuments(); // Fetch from API if not in local storage
-    }
+    fetchDocuments(); // Fetch documents from API on component mount
   }, []);
 
   const fetchDocuments = async () => {
@@ -28,28 +21,27 @@ const DokumentiPage = () => {
         console.error('Access token not found in local storage');
         return;
       }
-  
+
       const response = await axios.get('/api/documents', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
-  
-      console.log('Response from server:', response.data);
+
       setDocuments(response.data.documents);
     } catch (error) {
       console.error('Error fetching documents:', error);
     }
   };
-  
-
 
   const handleUpdateFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/api/documents/${updatingDocumentId}`, {
-        filename: updateFormData.filename,
-        user_id: updateFormData.user_id,
+      const token = localStorage.getItem('auth_token');
+      await axios.put(`/api/documents/${updatingDocumentId}`, updateFormData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
       setUpdatingDocumentId(null);
       setUpdateFormData({ filename: '', user_id: '' });
@@ -60,10 +52,8 @@ const DokumentiPage = () => {
   };
 
   const handlePlagiarism = async (id) => {
-    
     try {
       const token = localStorage.getItem('auth_token');
-
       if (!token) {
         console.error('Access token not found in local storage');
         return;
@@ -75,7 +65,7 @@ const DokumentiPage = () => {
         },
       });
 
-      console.log('Plagiarism check result:', response.data);
+      alert(`Procenat plagiarizma za dokument sa ID:${id} je ${response.data.plagPercent}% `);
 
       const updatedDocuments = documents.map((doc) => {
         if (doc.id === id) {
@@ -83,11 +73,8 @@ const DokumentiPage = () => {
         }
         return doc;
       });
-    
-      setDocuments(updatedDocuments);
-    
-      localStorage.setItem('documents', JSON.stringify(updatedDocuments));
 
+      setDocuments(updatedDocuments);
     } catch (error) {
       console.error('Error checking plagiarism:', error);
     }
@@ -95,17 +82,18 @@ const DokumentiPage = () => {
 
   const handleDelete = async (documentId) => {
     try {
+      const token = localStorage.getItem('auth_token');
       if (!token) {
         console.error('Access token not found in local storage');
         return;
       }
-  
+
       await axios.delete(`/api/documents/${documentId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
-  
+
       fetchDocuments();
     } catch (error) {
       console.error('Error deleting document:', error);
@@ -118,7 +106,7 @@ const DokumentiPage = () => {
 
   const indexOfLastDocument = (currentPage + 1) * documentsPerPage;
   const indexOfFirstDocument = indexOfLastDocument - documentsPerPage;
-  const currentDocuments = Array.isArray(documents) ? documents.slice(indexOfFirstDocument, indexOfLastDocument) : [];
+  const currentDocuments = documents.slice(indexOfFirstDocument, indexOfLastDocument);
 
   return (
     <div className="col-11 mt-5">
@@ -151,7 +139,6 @@ const DokumentiPage = () => {
                     <th className="col-2">Dokument ID</th>
                     <th className="col-2">Naziv dokumenta</th>
                     <th className="col-2">Student</th>
-                    <th className="col-2">% plagiarizma</th>
                     <th className="col-2">Proveri plagiarizam</th>
                     <th className="col-1">Obriši</th>
                   </tr>
@@ -162,20 +149,16 @@ const DokumentiPage = () => {
                       <td className="align-middle">{document.id}</td>
                       <td className="align-middle">{document.filename}</td>
                       <td className="align-middle">{document.user}</td>
-                      <td className="align-middle">
-                        {document.plagPercent != null ? `${document.plagPercent}%` : 'nije jos proveren'}
-                        </td>
                       <td className="align-middle text-center">
-                      <Button className="btn btn-warning py-1" onClick={() => handlePlagiarism(document.id)}>
-                        Proveri
-                      </Button>
+                        <Button className="btn btn-warning py-1" onClick={() => handlePlagiarism(document.id)}>
+                          Proveri
+                        </Button>
                       </td>
                       <td className="align-middle text-center">
-                      <Button className="btn btn-danger py-1" onClick={() => handleDelete(document.id)}>
-                        Obriši
-                      </Button>
+                        <Button className="btn btn-danger py-1" onClick={() => handleDelete(document.id)}>
+                          Obriši
+                        </Button>
                       </td>
-
                     </tr>
                   ))}
                 </tbody>
