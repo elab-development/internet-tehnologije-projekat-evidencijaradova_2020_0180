@@ -13,7 +13,6 @@ const initialToken = window.localStorage.getItem("auth_token");
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* Pass the initialToken as a prop to the App component */}
     <App initialToken={initialToken} />
   </React.StrictMode>
 );
