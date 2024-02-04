@@ -14,7 +14,47 @@ class DocumentSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 10; $i++) {
+        $filename0 = time() . '_' . 'fajl_broj_01' . '.txt';
+        $content0 = "These violent delights have violent ends
+        And in their triumph die, like fire and powder,
+        Which as they kiss consume. The sweetest honey
+        Is loathsome in his own deliciousness
+        And in the taste confounds the appetite.
+        Therefore love moderately; long love doth so;
+        Too swift arrives as tardy as too slow.";
+
+        $path0 = 'uploads/' . $filename0;
+
+        Storage::disk('public')->put($path0, $content0);
+
+        Document::create([
+            'filename' => $filename0,
+            'user_id' => 1,
+        ]);
+
+        $filename0 = time() . '_' . 'fajl_broj_02' . '.txt';
+        $content0 = "These violent delights have violent ends
+        And in their triumph die, like fire and powder,
+        Which as they kiss consume. The sweetest honey
+        Is loathsome in his own deliciousness
+        And in the taste confounds the appetite.
+        Therefore love moderately; long love doth so;
+        Too swift arrives as tardy as too slow.
+        Ovo je neki random tekst koji nije plagijat
+        Ovo je neki random tekst koji nije plagijat
+        Ovo je neki random tekst koji nije plagijat
+        Ovo je neki random tekst koji nije plagijat";
+
+        $path0 = 'uploads/' . $filename0;
+
+        Storage::disk('public')->put($path0, $content0);
+
+        Document::create([
+            'filename' => $filename0,
+            'user_id' => 1,
+        ]);
+
+        for ($i = 1; $i < 11; $i++) {
 
             $filename = time() . '_' . 'fajl_broj_'. $i . '.txt';
             $content = "Ovo je sadržaj dokumenta broj $i.";
