@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:api', 'role:professor']], function () {
             Route::post('create-user', 'store')->name('store');
             Route::put('update-user/{id}', 'update')->name('update');
             Route::delete('destroy-user/{id}', 'destroy')->name('destroy');
+            Route::get('/export-users', 'exportCsv')->name('export');
         });
     });
     

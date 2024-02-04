@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -90,4 +91,34 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted successfully']);
     }
+
+    public function exportCsv()
+    {
+        $filename = "users.csv";
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename={$filename}",
+        ];
+
+        return response()->stream(function () {
+            // Dodavanje UTF-8 BOM za Excel kompatibilnost
+            echo "\xEF\xBB\xBF";
+
+            $handle = fopen('php://output', 'w');
+            // Definisanje kolona
+            fputcsv($handle, ['ID', 'Name', 'Email', 'Ocena']);
+
+            // Dohvatanje korisnika i dodavanje u CSV
+            $users = User::all();
+            foreach ($users as $user) {
+                if ($user->role!='professor') {
+                    fputcsv($handle, [$user->id, $user->name, $user->email]);
+                }
+            }
+
+            fclose($handle);
+        }, 200, $headers);
+    }
 }
+
+

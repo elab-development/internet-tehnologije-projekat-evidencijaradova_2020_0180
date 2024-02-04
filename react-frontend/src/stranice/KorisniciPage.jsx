@@ -98,6 +98,27 @@ const KorisniciPage = () => {
     setCurrentPage(event.selected);
   };
 
+  const handleExport = () => {
+
+    axios.get('/api/export-users', {
+      responseType: 'blob', // Veoma važno za preuzimanje fajlova
+      headers: {
+        'Authorization': `Bearer ${token}`, // Pretpostavljam da koristite Bearer token za autentifikaciju
+      }
+    })
+    .then(response => {
+      // Kreiranje URL-a iz bloba i iniciranje preuzimanja
+      const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = 'users.csv'; // Ime fajla za preuzimanje
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    })
+    .catch(error => console.error('Error:', error));
+  };
+
   const indexOfLastUser = (currentPage + 1) * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
@@ -129,6 +150,7 @@ const KorisniciPage = () => {
             </form>
           ) : (
             // Tabela sa korisnicima
+          
           <div className='d-flex flex-column align-items-center'>
             <table className="table table-bordered">
               <thead className="thead-dark">
@@ -176,6 +198,11 @@ const KorisniciPage = () => {
               />
             </div>
           )}
+        </div>
+        <div className="d-flex justify-content-end mb-2">
+          <Button className="btn btn-success" onClick={handleExport}>
+            Oceni studente
+          </Button>
         </div>
       </div>
     </div>
