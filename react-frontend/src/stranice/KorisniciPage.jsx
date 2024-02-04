@@ -142,6 +142,7 @@ const KorisniciPage = () => {
               </thead>
               <tbody>
                 {currentUsers.map((user) => (
+                  user.email != "profesor@example.com" ?(
                   <tr key={user.id}>
                     <td className="align-middle">{user.id}</td>
                     <td className="align-middle">{user.name}</td>
@@ -157,6 +158,7 @@ const KorisniciPage = () => {
                     </Button>
                     </td>
                   </tr>
+                  ) : null
                 ))}
               </tbody>
             </table>

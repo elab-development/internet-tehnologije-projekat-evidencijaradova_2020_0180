@@ -67,7 +67,7 @@ const NavBar = ({ token, removeToken }) => {
             <NavLink to="/" text="Pocetna" />
             <NavLink to="/contact" text="Kontakt" />
             {token && <NavLink to="/files" text="Slanje fajlova" />}
-            {token && userRole === "professor" && <NavLink to="/users" text="Korisnici" />}
+            {token && userRole === "professor" && <NavLink to="/users" text="Studenti" />}
             {token && userRole === "professor" && <NavLink to="/pregled-radova" text="Pregled Radova" />}
             {!token ? (
               location.pathname !== "/login" && (

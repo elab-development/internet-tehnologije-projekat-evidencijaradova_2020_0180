@@ -138,7 +138,7 @@ const DokumentiPage = () => {
                   <tr>
                     <th className="col-2">Dokument ID</th>
                     <th className="col-2">Naziv dokumenta</th>
-                    <th className="col-2">Student</th>
+                    <th className="col-2">Ime</th>
                     <th className="col-2">Proveri plagiarizam</th>
                     <th className="col-1">Obriši</th>
                   </tr>
