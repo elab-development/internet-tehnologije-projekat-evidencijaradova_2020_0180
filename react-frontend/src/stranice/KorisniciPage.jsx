@@ -96,32 +96,10 @@ const KorisniciPage = () => {
     setCurrentPage(event.selected); // Postavlja trenutnu stranicu na izabranu
   };
 
-  const handleExport = () => {
-
-    axios.get('/api/export-users', {
-      responseType: 'blob', // Veoma važno za preuzimanje fajlova
-      headers: {
-        'Authorization': `Bearer ${token}`, // Pretpostavljam da koristite Bearer token za autentifikaciju
-      }
-    })
-    .then(response => {
-      // Kreiranje URL-a iz bloba i iniciranje preuzimanja
-      const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = 'users.csv'; // Ime fajla za preuzimanje
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    })
-    .catch(error => console.error('Error:', error));
-  };
-
   let filteredAndSortedUsers = users.filter((user) =>
     user.name.toLowerCase().startsWith(searchTerm.trim().toLowerCase())
   );
 
-  // Sorting logic
   switch (sortOption) {
     case "name-asc":
       filteredAndSortedUsers.sort((a, b) => a.name.localeCompare(b.name));
@@ -138,10 +116,6 @@ const KorisniciPage = () => {
     default:
       break;
   }
-
-  // const filteredUsers = users.filter((user) =>
-  //   user.name.toLowerCase().startsWith(searchTerm.toLowerCase())
-  // );
 
   // Izračunavanje indeksa za trenutnu stranicu
   const indexOfLastUser = (currentPage + 1) * usersPerPage;
@@ -166,7 +140,6 @@ const KorisniciPage = () => {
                 className="form-control mb-3"
               />
             </div>
-            {/* Dropdown for sorting options */}
             <div className="col-md-4">
               <select
                 value={sortOption}
@@ -181,7 +154,6 @@ const KorisniciPage = () => {
             </div>
           </div>
           {updatingUserId ? (
-            // Form for updating a user
             <form onSubmit={handleUpdateFormSubmit}>
               <input
                 type="text"
@@ -209,49 +181,6 @@ const KorisniciPage = () => {
               </Button>
             </form>
           ) : (
-<<<<<<<<< Temporary merge branch 1
-            // Tabela sa korisnicima
-          
-          <div className='d-flex flex-column align-items-center'>
-            <table className="table table-bordered">
-              <thead className="thead-dark">
-                <tr>
-                  <th className="col-1">ID</th>
-                  <th className="col-4">Ime</th>
-                  <th className="col-4">Email</th>
-                  <th className="dugme">Ažuriraj</th>
-                  <th className="dugme">Obriši</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentUsers.map((user) => (
-                  user.email != "profesor@example.com" ?(
-                  <tr key={user.id}>
-                    <td className="align-middle">{user.id}</td>
-                    <td className="align-middle">{user.name}</td>
-                    <td className="align-middle">{user.email}</td>
-                    <td className="align-middle">
-                    <Button className="btn btn-warning py-1" onClick={() => handleUpdate(user.id)}>
-                      Ažuriraj
-                    </Button>
-                    </td>
-                    <td className="align-middle">
-                    <Button className="btn btn-danger py-1" onClick={() => handleDelete(user.id)}>
-                      Obriši
-                    </Button>
-                    </td>
-                  </tr>
-                  ) : null
-                ))}
-              </tbody>
-            </table>
-            <ReactPaginate
-                previousLabel={'Prethodna'}
-                nextLabel={'Sledeća'}
-                breakLabel={'...'}
-                pageCount={Math.ceil(users.length / usersPerPage)}
-=========
-            // Table with users
             <div className="d-flex flex-column align-items-center">
               <table className="table table-bordered">
                 <thead className="thead-dark">
@@ -296,7 +225,6 @@ const KorisniciPage = () => {
                 pageCount={Math.ceil(
                   filteredAndSortedUsers.length / usersPerPage
                 )}
->>>>>>>>> Temporary merge branch 2
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
                 onPageChange={handlePageClick}
@@ -306,11 +234,6 @@ const KorisniciPage = () => {
               />
             </div>
           )}
-        </div>
-        <div className="d-flex justify-content-end mb-2">
-          <Button className="btn btn-success" onClick={handleExport}>
-            Oceni studente
-          </Button>
         </div>
       </div>
     </div>

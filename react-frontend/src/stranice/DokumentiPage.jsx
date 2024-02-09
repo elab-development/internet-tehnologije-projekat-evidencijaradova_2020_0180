@@ -101,36 +101,6 @@ const DokumentiPage = () => {
       <h1 className="offset-3">Dokumenti</h1>
       <div className="row">
         <div className="col-md-7 offset-3">
-<<<<<<<<< Temporary merge branch 1
-          {updatingDocumentId ? (
-            <form onSubmit={handleUpdateFormSubmit}>
-              <input
-                type="text"
-                value={updateFormData.filename}
-                onChange={(e) => setUpdateFormData({ ...updateFormData, filename: e.target.value })}
-                placeholder="Filename"
-              />
-              <input
-                type="text"
-                value={updateFormData.user_id}
-                onChange={(e) => setUpdateFormData({ ...updateFormData, user_id: e.target.value })}
-                placeholder="User ID"
-              />
-              <Button type="submit" className="btn btn-primary">
-                Pošalji
-              </Button>
-            </form>
-          ) : (
-            <div className='d-flex flex-column align-items-center'>
-              <table className="table table-bordered">
-                <thead className="thead-dark">
-                  <tr>
-                    <th className="col-2">Dokument ID</th>
-                    <th className="col-2">Naziv dokumenta</th>
-                    <th className="col-2">Ime</th>
-                    <th className="col-2">Proveri plagiarizam</th>
-                    <th className="col-1">Obriši</th>
-=========
           <div className="d-flex flex-column align-items-center">
             <table className="table table-bordered">
               <thead className="thead-dark">
@@ -164,7 +134,6 @@ const DokumentiPage = () => {
                         Obriši
                       </Button>
                     </td>
->>>>>>>>> Temporary merge branch 2
                   </tr>
                 ))}
               </tbody>
