@@ -8,31 +8,38 @@ import { useState } from 'react';
 
 const useApiRequest = (initialData = null) => {
   const [data, setData] = useState(initialData);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const fetchData = async (apiFunction, ...args) => {
     try {
       setLoading(true);
+      setError(null); // Resetujte stanje greške pre slanja novog zahteva
       const response = await apiFunction(...args);
-      setData(response.data);
-      return null; // Indicates no error occurred
-    } catch (err) {
-      console.error('API Request Error:', err);
-      if (err.response) {
-        console.error('Server Response:', err.response);
+
+      // Provera da li odgovor sadrži očekivane podatke
+      if (response && response.data) {
+        setData(response.data); // Ažuriranje stanja sa podacima iz odgovora
+        return response.data; // Vraćanje podataka za trenutnu upotrebu
+      } else {
+        throw new Error('Nisu primljeni podaci iz zahteva');
       }
-      return err; // Return the entire error object
+    } catch (err) {
+      setError(err); // Ažuriranje stanja greške sa uhvaćenom greškom
+      console.error('Greška pri zahtevu ka API-ju:', err);
+      // Pružanje detaljnijih informacija o grešci ako su dostupne
+      if (err.response) {
+        console.error('Odgovor sa servera:', err.response);
+        return { error: err.response }; // Vraćanje detalja o grešci
+      } else {
+        return { error: err }; // Vraćanje opšte greške ako odgovor nije dostupan
+      }
     } finally {
-      setLoading(false);
+      setLoading(false); // Postavljanje stanja u "loading" na "false" nakon završetka
     }
   };
-  
-  
-  
-  
 
-  return { data, loading, fetchData };
+  return { data, error, loading, fetchData };
 };
 
-// Exportovanje hook-a kako bi bio dostupan u drugim delovima aplikacije
 export default useApiRequest;

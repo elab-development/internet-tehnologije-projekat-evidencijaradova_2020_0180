@@ -1,58 +1,56 @@
+// Komponenta za slanje fajlova na server
 import React, { useState } from 'react';
 import axios from 'axios';
-import Button from '../komponente/Button';
-import { useNavigate } from 'react-router-dom';
+import Button from '../komponente/Button'; 
+import { useNavigate } from 'react-router-dom'; 
 
-// Komponenta za slanje fajlova
 const SlanjeFajlova = ({ authToken }) => {
-  // Stanje za čuvanje informacija o izabranom fajlu
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null); // Stanje za čuvanje izabranog fajla
 
-  // Funkcija koja se poziva prilikom promene izabranog fajla
+  // Funkcija koja se poziva kada korisnik izabere fajl
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    setFile(e.target.files[0]); // Postavljanje izabranog fajla u stanje
   };
-  let navigate = useNavigate();
+  
+  let navigate = useNavigate(); // Instanciranje useNavigate za kasniju navigaciju
 
   // Funkcija za slanje fajla na server
   const handleUpload = () => {
-    if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
+    if (file) { // Provera da li je fajl izabran
+      const formData = new FormData(); // Kreiranje FormData objekta za slanje fajla
+      formData.append('file', file); // Dodavanje fajla u FormData
 
+      // Slanje POST zahteva na server sa fajlom i zaglavljem za autorizaciju
       axios.post('/api/uploadFile', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'multipart/form-data', // Postavljanje Content-Type u multipart/form-data
+          'Authorization': `Bearer ${authToken}`, // Dodavanje tokena za autorizaciju
         },
       })
       .then(response => {
-        console.log(response.data);
+        console.log(response.data); // Logovanje odgovora servera
       })
       .catch(error => {
+        // Obrada mogućih grešaka
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.error('Error response:', error.response);
+          console.error('Error response:', error.response); // Logovanje detalja o grešci
           console.log('Data:', error.response.data);
           console.log('Status:', error.response.status);
           console.log('Headers:', error.response.headers);
         } else if (error.request) {
-          // The request was made but no response was received
-          console.error('Error request:', error.request);
+          console.error('Error request:', error.request); // Logovanje greške u zahtevu
         } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error('Error message:', error.message);
+          console.error('Error message:', error.message); // Logovanje poruke greške
         }
-        console.error('Config:', error.config);
+        console.error('Config:', error.config); // Logovanje konfiguracije zahteva
       });
     } else {
-      console.error('No file selected for upload.');
+      console.error('No file selected for upload.'); // Logovanje ukoliko fajl nije izabran
     }
-    navigate("/");
+    navigate("/"); // Navigacija na početnu stranicu nakon slanja fajla
   };
 
-  // Prikazivanje korisničkog interfejsa
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
