@@ -100,7 +100,6 @@ const KorisniciPage = () => {
     user.name.toLowerCase().startsWith(searchTerm.trim().toLowerCase())
   );
 
-  // Sorting logic
   switch (sortOption) {
     case "name-asc":
       filteredAndSortedUsers.sort((a, b) => a.name.localeCompare(b.name));
@@ -117,10 +116,6 @@ const KorisniciPage = () => {
     default:
       break;
   }
-
-  // const filteredUsers = users.filter((user) =>
-  //   user.name.toLowerCase().startsWith(searchTerm.toLowerCase())
-  // );
 
   // Izračunavanje indeksa za trenutnu stranicu
   const indexOfLastUser = (currentPage + 1) * usersPerPage;
@@ -145,7 +140,6 @@ const KorisniciPage = () => {
                 className="form-control mb-3"
               />
             </div>
-            {/* Dropdown for sorting options */}
             <div className="col-md-4">
               <select
                 value={sortOption}
@@ -160,7 +154,6 @@ const KorisniciPage = () => {
             </div>
           </div>
           {updatingUserId ? (
-            // Form for updating a user
             <form onSubmit={handleUpdateFormSubmit}>
               <input
                 type="text"
@@ -188,7 +181,6 @@ const KorisniciPage = () => {
               </Button>
             </form>
           ) : (
-            // Table with users
             <div className="d-flex flex-column align-items-center">
               <table className="table table-bordered">
                 <thead className="thead-dark">
