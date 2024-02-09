@@ -96,27 +96,6 @@ const KorisniciPage = () => {
     setCurrentPage(event.selected); // Postavlja trenutnu stranicu na izabranu
   };
 
-  const handleExport = () => {
-
-    axios.get('/api/export-users', {
-      responseType: 'blob', // Veoma važno za preuzimanje fajlova
-      headers: {
-        'Authorization': `Bearer ${token}`, // Pretpostavljam da koristite Bearer token za autentifikaciju
-      }
-    })
-    .then(response => {
-      // Kreiranje URL-a iz bloba i iniciranje preuzimanja
-      const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = 'users.csv'; // Ime fajla za preuzimanje
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    })
-    .catch(error => console.error('Error:', error));
-  };
-
   let filteredAndSortedUsers = users.filter((user) =>
     user.name.toLowerCase().startsWith(searchTerm.trim().toLowerCase())
   );
@@ -246,7 +225,6 @@ const KorisniciPage = () => {
                 pageCount={Math.ceil(
                   filteredAndSortedUsers.length / usersPerPage
                 )}
->>>>>>>>> Temporary merge branch 2
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
                 onPageChange={handlePageClick}
@@ -256,11 +234,6 @@ const KorisniciPage = () => {
               />
             </div>
           )}
-        </div>
-        <div className="d-flex justify-content-end mb-2">
-          <Button className="btn btn-success" onClick={handleExport}>
-            Oceni studente
-          </Button>
         </div>
       </div>
     </div>
