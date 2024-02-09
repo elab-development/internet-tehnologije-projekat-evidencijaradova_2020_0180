@@ -116,7 +116,26 @@ const KorisniciPage = () => {
     default:
       break;
   }
+  const handleExport = () => {
 
+    axios.get('/api/export-users', {
+      responseType: 'blob', // Veoma važno za preuzimanje fajlova
+      headers: {
+        'Authorization': `Bearer ${token}`, // Pretpostavljam da koristite Bearer token za autentifikaciju
+      }
+    })
+    .then(response => {
+      // Kreiranje URL-a iz bloba i iniciranje preuzimanja
+      const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = 'users.csv'; // Ime fajla za preuzimanje
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    })
+    .catch(error => console.error('Error:', error));
+  };
   // Izračunavanje indeksa za trenutnu stranicu
   const indexOfLastUser = (currentPage + 1) * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -235,6 +254,11 @@ const KorisniciPage = () => {
             </div>
           )}
         </div>
+          <div className="d-flex justify-content-end mb-2">
+            <Button className="btn btn-success" onClick={handleExport}>
+              Oceni studente
+            </Button>
+          </div>
       </div>
     </div>
   );
