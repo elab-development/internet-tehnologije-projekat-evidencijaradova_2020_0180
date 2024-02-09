@@ -101,6 +101,7 @@ const DokumentiPage = () => {
       <h1 className="offset-3">Dokumenti</h1>
       <div className="row">
         <div className="col-md-7 offset-3">
+<<<<<<<<< Temporary merge branch 1
           {updatingDocumentId ? (
             <form onSubmit={handleUpdateFormSubmit}>
               <input
@@ -126,45 +127,61 @@ const DokumentiPage = () => {
                   <tr>
                     <th className="col-2">Dokument ID</th>
                     <th className="col-2">Naziv dokumenta</th>
-                    <th className="col-2">Student</th>
+                    <th className="col-2">Ime</th>
                     <th className="col-2">Proveri plagiarizam</th>
                     <th className="col-1">Obriši</th>
+=========
+          <div className="d-flex flex-column align-items-center">
+            <table className="table table-bordered">
+              <thead className="thead-dark">
+                <tr>
+                  <th className="col-2">Dokument ID</th>
+                  <th className="col-2">Naziv dokumenta</th>
+                  <th className="col-2">Student</th>
+                  <th className="col-2">Proveri plagiarizam</th>
+                  <th className="col-1">Obriši</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentDocuments.map((document) => (
+                  <tr key={document.id}>
+                    <td className="align-middle">{document.id}</td>
+                    <td className="align-middle">{document.filename}</td>
+                    <td className="align-middle">{document.user}</td>
+                    <td className="align-middle text-center">
+                      <Button
+                        className="btn btn-warning py-1"
+                        onClick={() => handlePlagiarism(document.id)}
+                      >
+                        Proveri
+                      </Button>
+                    </td>
+                    <td className="align-middle text-center">
+                      <Button
+                        className="btn btn-danger py-1"
+                        onClick={() => handleDelete(document.id)}
+                      >
+                        Obriši
+                      </Button>
+                    </td>
+>>>>>>>>> Temporary merge branch 2
                   </tr>
-                </thead>
-                <tbody>
-                  {currentDocuments.map((document) => (
-                    <tr key={document.id}>
-                      <td className="align-middle">{document.id}</td>
-                      <td className="align-middle">{document.filename}</td>
-                      <td className="align-middle">{document.user}</td>
-                      <td className="align-middle text-center">
-                        <Button className="btn btn-warning py-1" onClick={() => handlePlagiarism(document.id)}>
-                          Proveri
-                        </Button>
-                      </td>
-                      <td className="align-middle text-center">
-                        <Button className="btn btn-danger py-1" onClick={() => handleDelete(document.id)}>
-                          Obriši
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <ReactPaginate
-                previousLabel={'Previous'}
-                nextLabel={'Next'}
-                breakLabel={'...'}
-                pageCount={Math.ceil(documents.length / documentsPerPage)}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName={'pagination'}
-                subContainerClassName={'pages pagination'}
-                activeClassName={'active'}
-              />
-            </div>
-          )}
+                ))}
+              </tbody>
+            </table>
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."}
+              pageCount={Math.ceil(documents.length / documentsPerPage)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination"}
+              subContainerClassName={"pages pagination"}
+              activeClassName={"active"}
+            />
+          </div>
         </div>
       </div>
     </div>

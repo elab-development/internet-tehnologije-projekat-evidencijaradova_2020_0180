@@ -209,7 +209,9 @@ const KorisniciPage = () => {
               </Button>
             </form>
           ) : (
+<<<<<<<<< Temporary merge branch 1
             // Tabela sa korisnicima
+          
           <div className='d-flex flex-column align-items-center'>
             <table className="table table-bordered">
               <thead className="thead-dark">
@@ -223,6 +225,7 @@ const KorisniciPage = () => {
               </thead>
               <tbody>
                 {currentUsers.map((user) => (
+                  user.email != "profesor@example.com" ?(
                   <tr key={user.id}>
                     <td className="align-middle">{user.id}</td>
                     <td className="align-middle">{user.name}</td>
@@ -238,6 +241,7 @@ const KorisniciPage = () => {
                     </Button>
                     </td>
                   </tr>
+                  ) : null
                 ))}
               </tbody>
             </table>
@@ -246,6 +250,53 @@ const KorisniciPage = () => {
                 nextLabel={'Sledeća'}
                 breakLabel={'...'}
                 pageCount={Math.ceil(users.length / usersPerPage)}
+=========
+            // Table with users
+            <div className="d-flex flex-column align-items-center">
+              <table className="table table-bordered">
+                <thead className="thead-dark">
+                  <tr>
+                    <th className="col-1">ID</th>
+                    <th className="col-4">Ime</th>
+                    <th className="col-4">Email</th>
+                    <th className="dugme">Ažuriraj</th>
+                    <th className="dugme">Obriši</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentUsers.map((user) => (
+                    <tr key={user.id}>
+                      <td className="align-middle">{user.id}</td>
+                      <td className="align-middle">{user.name}</td>
+                      <td className="align-middle">{user.email}</td>
+                      <td className="align-middle">
+                        <Button
+                          className="btn btn-warning py-1"
+                          onClick={() => handleUpdate(user.id)}
+                        >
+                          Ažuriraj
+                        </Button>
+                      </td>
+                      <td className="align-middle">
+                        <Button
+                          className="btn btn-danger py-1"
+                          onClick={() => handleDelete(user.id)}
+                        >
+                          Obriši
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <ReactPaginate
+                previousLabel={"Prethodna"}
+                nextLabel={"Sledeća"}
+                breakLabel={"..."}
+                pageCount={Math.ceil(
+                  filteredAndSortedUsers.length / usersPerPage
+                )}
+>>>>>>>>> Temporary merge branch 2
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
                 onPageChange={handlePageClick}
